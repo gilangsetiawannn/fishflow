@@ -78,10 +78,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   onPressed: () {
-                    // Arahkan ke halaman HomeScreen dan kirim data pengguna
-                    Navigator.pushReplacementNamed(context, '/home', arguments: {
-                      'name': nameController.text,
-                    });
+                    // Mendapatkan data argumen dari RegisterScreen jika ada
+                    final Map<String, dynamic>? registerData =
+                        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+                    // Arahkan ke halaman ProfileScreen dan kirim data ke homescreen
+                    Navigator.pushReplacementNamed(context, '/home', arguments: registerData);
                   },
                   child: const Text('Login', style: TextStyle(color: Colors.white)),
                 ),

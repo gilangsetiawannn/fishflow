@@ -8,94 +8,90 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _currentIndex = 4; // Tab aktif dimulai di Profil (index 4)
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
-  String _selectedRole = ''; // Menyimpan role yang dipilih
+  String _selectedRole = '';
+  bool _isEditing = false; // For edit mode
+  int _currentIndex = 4; // To highlight the profile tab as active
 
-  bool _isEditing = false; // Variabel untuk mengecek apakah dalam mode edit
+  // Function to navigate based on bottom navigation index
+  void _onBottomNavigationTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    // Navigate based on selected tab index
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else if (index == 4) {
+      Navigator.pushReplacementNamed(context, '/profile');
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
-    // Menerima data profil dari argumen rute
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Retrieve data passed via arguments
     final Map<String, dynamic>? profileData =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
 
-    // Jika data profil ada, isikan ke controller
     if (profileData != null) {
-      nameController.text = profileData['name'] ?? '';
-      emailController.text = profileData['email'] ?? '';
-      phoneController.text = profileData['phone'] ?? '';
-      _selectedRole = profileData['role'] ?? ''; // Set role yang sudah ada
+      setState(() {
+        nameController.text = profileData['name'] ?? '';
+        emailController.text = profileData['email'] ?? '';
+        phoneController.text = profileData['phone'] ?? '';
+        _selectedRole = profileData['role'] ?? '';
+      });
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: SingleChildScrollView( // Membuat halaman bisa digulir
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.grey[300],
-                    child: const Icon(Icons.person, size: 50, color: Colors.white),
-                  ),
-                ],
+      appBar: AppBar(title: const Text('Profil')),
+      body: SingleChildScrollView( // Makes the screen scrollable
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Profile Image and Edit Button
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(
+                  'https://example.com/your-profile-image-url.jpg', // Change URL to user's profile image
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            // Tombol Edit Profil
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isEditing = !_isEditing; // Toggle mode edit
-                });
-              },
-              child: Text(_isEditing ? 'Selesai Edit' : 'Edit Profil'),
-            ),
-            const SizedBox(height: 20),
-            buildTextField("Nama", nameController, _isEditing),
-            const SizedBox(height: 10),
-            buildTextField("Email", emailController, _isEditing),
-            const SizedBox(height: 10),
-            buildTextField("Nomor", phoneController, _isEditing),
-            const SizedBox(height: 10),
-            buildDropdownField("Role", _selectedRole, _isEditing),
-          ],
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _isEditing = !_isEditing; // Toggle edit mode
+                  });
+                },
+                child: Text(_isEditing ? 'Selesai Edit' : 'Edit Profil'),
+              ),
+              const SizedBox(height: 20),
+              // Profile Information
+              buildTextField("Nama", nameController, _isEditing),
+              const SizedBox(height: 10),
+              buildTextField("Email", emailController, _isEditing),
+              const SizedBox(height: 10),
+              buildTextField("Nomor", phoneController, _isEditing),
+              const SizedBox(height: 10),
+              buildDropdownField("Role", _selectedRole, _isEditing),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.blue.shade900,
         unselectedItemColor: Colors.grey,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          if (index == _currentIndex) return; // Jika tab yang sama ditekan, abaikan
-
-          setState(() {
-            _currentIndex = index;
-          });
-
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/home');
-          }
-        },
+        currentIndex: _currentIndex, // Highlight active tab
+        onTap: _onBottomNavigationTap,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_basket), label: 'Keranjang'),
           BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop'),
           BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
@@ -105,38 +101,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Fungsi untuk membangun field teks
+  // Helper function to build text fields
   Widget buildTextField(String label, TextEditingController controller, bool isEditing) {
     return TextFormField(
       controller: controller,
-      readOnly: !isEditing, // Menonaktifkan kemampuan untuk mengedit field jika tidak dalam mode edit
-      decoration: InputDecoration(
-        labelText: label,
-        contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(width: 0.5, color: Colors.grey),
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(width: 0.5, color: Colors.grey),
-        ),
-      ),
+      readOnly: !isEditing, // If not editing, make the field read-only
+      decoration: InputDecoration(labelText: label, border: const OutlineInputBorder()),
     );
   }
 
-  // Fungsi untuk membangun dropdown untuk Role
+  // Helper function to build the dropdown for selecting a role
   Widget buildDropdownField(String label, String selectedValue, bool isEditing) {
     return DropdownButtonFormField<String>(
       value: selectedValue.isEmpty ? null : selectedValue,
-      decoration: InputDecoration(
-        labelText: label,
-        contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(width: 0.5, color: Colors.grey),
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(width: 0.5, color: Colors.grey),
-        ),
-      ),
       items: const [
         DropdownMenuItem(value: 'Pembeli', child: Text('Pembeli')),
         DropdownMenuItem(value: 'Penjual', child: Text('Penjual')),
@@ -148,7 +125,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _selectedRole = newValue ?? '';
               });
             }
-          : null, // Jika tidak dalam mode edit, dropdown tidak bisa diubah
+          : null,
+      decoration: InputDecoration(labelText: label, border: const OutlineInputBorder()),
     );
   }
 }

@@ -12,37 +12,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   String _selectedRole = '';
-  bool _isEditing = false; // For edit mode
-  int _currentIndex = 4; // To highlight the profile tab as active
+  bool _isEditing = false;
+  int _currentIndex = 4;
 
-  // Function to navigate based on bottom navigation index
   void _onBottomNavigationTap(int index) {
     setState(() {
       _currentIndex = index;
     });
 
-    // Navigate based on selected tab index
     if (index == 0) {
       Navigator.pushReplacementNamed(context, '/home');
+    } else if (index == 1) {
+      Navigator.pushReplacementNamed(context, '/keranjang');
+    } else if (index == 2) {
+      Navigator.pushReplacementNamed(context, '/shop');
+    } else if (index == 3) {
+      Navigator.pushReplacementNamed(context, '/kupon'); // Navigasi ke halaman Kupon
     } else if (index == 4) {
-      Navigator.pushReplacementNamed(context, '/profile');
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Retrieve data passed via arguments
-    final Map<String, dynamic>? profileData =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-
-    if (profileData != null) {
-      setState(() {
-        nameController.text = profileData['name'] ?? '';
-        emailController.text = profileData['email'] ?? '';
-        phoneController.text = profileData['phone'] ?? '';
-        _selectedRole = profileData['role'] ?? '';
-      });
+      // Tetap di halaman Profil
     }
   }
 
@@ -50,29 +37,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Profil')),
-      body: SingleChildScrollView( // Makes the screen scrollable
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Profile Image and Edit Button
               CircleAvatar(
                 radius: 50,
                 backgroundImage: NetworkImage(
-                  'https://example.com/your-profile-image-url.jpg', // Change URL to user's profile image
+                  'https://example.com/your-profile-image-url.jpg',
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    _isEditing = !_isEditing; // Toggle edit mode
+                    _isEditing = !_isEditing;
                   });
                 },
                 child: Text(_isEditing ? 'Selesai Edit' : 'Edit Profil'),
               ),
               const SizedBox(height: 20),
-              // Profile Information
               buildTextField("Nama", nameController, _isEditing),
               const SizedBox(height: 10),
               buildTextField("Email", emailController, _isEditing),
@@ -88,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.white,
         selectedItemColor: Colors.blue.shade900,
         unselectedItemColor: Colors.grey,
-        currentIndex: _currentIndex, // Highlight active tab
+        currentIndex: _currentIndex,
         onTap: _onBottomNavigationTap,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -101,16 +86,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Helper function to build text fields
   Widget buildTextField(String label, TextEditingController controller, bool isEditing) {
     return TextFormField(
       controller: controller,
-      readOnly: !isEditing, // If not editing, make the field read-only
+      readOnly: !isEditing,
       decoration: InputDecoration(labelText: label, border: const OutlineInputBorder()),
     );
   }
 
-  // Helper function to build the dropdown for selecting a role
   Widget buildDropdownField(String label, String selectedValue, bool isEditing) {
     return DropdownButtonFormField<String>(
       value: selectedValue.isEmpty ? null : selectedValue,

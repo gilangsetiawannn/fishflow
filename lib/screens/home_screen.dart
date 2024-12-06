@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'product_detail_screen.dart';
 import '../product_model.dart';
-import 'profile_screen.dart'; // Import ProfileScreen
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   List<Product> _searchResults = [];
-  int _currentIndex = 0; // Menyimpan tab aktif
+  int _currentIndex = 0;
 
   final List<Product> _products = [
     Product(
@@ -84,8 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onSearchChanged() {
     setState(() {
       _searchResults = _products
-          .where((product) =>
-              product.name.toLowerCase().contains(_searchController.text.toLowerCase()))
+          .where((product) => product.name.toLowerCase().contains(_searchController.text.toLowerCase()))
           .toList();
     });
   }
@@ -101,16 +100,21 @@ class _HomeScreenState extends State<HomeScreen> {
       _currentIndex = index;
     });
 
-    if (index == 4) { // Index 4 untuk Profil
+    if (index == 1) {
+      Navigator.pushNamed(context, '/keranjang');
+    } else if (index == 2) {
+      Navigator.pushReplacementNamed(context, '/shop');
+    } else if (index == 3) {
+      Navigator.pushReplacementNamed(context, '/kupon'); // Navigasi ke KuponPage
+    } else if (index == 4) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ProfileScreen(), // Pindah ke halaman profil
+          builder: (context) => const ProfileScreen(),
         ),
       ).then((_) {
-        // Kembali ke tab sebelumnya jika kembali dari profil
         setState(() {
-          _currentIndex = 0; // Set tab kembali ke Home
+          _currentIndex = 0;
         });
       });
     }
@@ -119,6 +123,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('FishFlow'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
+            onPressed: () {
+              Navigator.pushNamed(context, '/keranjang_total_produk');
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -132,45 +147,50 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Best Seller", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 10),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _searchResults.length >= 4 ? 4 : _searchResults.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemBuilder: (context, index) {
+              child: CustomScrollView(
+                slivers: [
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      const Text("Best Seller", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
+                    ]),
+                  ),
+                  SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
                         final product = _searchResults[index];
                         return _buildProductCard(product);
                       },
+                      childCount: _searchResults.length >= 4 ? 4 : _searchResults.length,
                     ),
-                    const SizedBox(height: 20),
-                    const Text("Favorite", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 10),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _products.length - 4,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemBuilder: (context, index) {
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      const SizedBox(height: 20),
+                      const Text("Favorite", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
+                    ]),
+                  ),
+                  SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
                         final product = _products[index + 4];
                         return _buildProductCard(product);
                       },
+                      childCount: _products.length - 4,
                     ),
-                  ],
-                ),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -180,10 +200,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         selectedItemColor: Colors.blue.shade900,
         unselectedItemColor: Colors.grey,
-        currentIndex: _currentIndex, // Menyoroti tab yang aktif
+        currentIndex: _currentIndex,
         onTap: _onBottomNavigationTap,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_basket), label: 'Keranjang'),
           BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop'),
           BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
@@ -203,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
-      child: Card(
+            child: Card(
         child: Column(
           children: [
             Expanded(

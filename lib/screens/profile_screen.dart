@@ -13,7 +13,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController phoneController = TextEditingController();
   String _selectedRole = '';
   bool _isEditing = false;
-  int _currentIndex = 4;
+  int _currentIndex = 3;
 
   void _onBottomNavigationTap(int index) {
     setState(() {
@@ -25,12 +25,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else if (index == 1) {
       Navigator.pushReplacementNamed(context, '/keranjang');
     } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/shop');
-    } else if (index == 3) {
       Navigator.pushReplacementNamed(context, '/kupon'); // Navigasi ke halaman Kupon
-    } else if (index == 4) {
-      // Tetap di halaman Profil
+    } else if (index == 3) {
     }
+  }
+
+  void _logout() {
+    // Logic untuk logout dan kembali ke halaman login
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
@@ -65,6 +67,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               buildTextField("Nomor", phoneController, _isEditing),
               const SizedBox(height: 10),
               buildDropdownField("Role", _selectedRole, _isEditing),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _logout,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+                child: Text('Logout'),
+              ),
             ],
           ),
         ),
@@ -78,7 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_basket), label: 'Keranjang'),
-          BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop'),
           BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],

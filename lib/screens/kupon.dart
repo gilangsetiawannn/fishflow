@@ -6,7 +6,7 @@ class KuponPage extends StatefulWidget {
 }
 
 class _KuponPageState extends State<KuponPage> {
-  int _currentIndex = 3; // Menyoroti tab Rewards sebagai aktif
+  int _currentIndex = 2; // Menyoroti tab Rewards sebagai aktif
 
   void _onBottomNavigationTap(int index) {
     setState(() {
@@ -18,10 +18,8 @@ class _KuponPageState extends State<KuponPage> {
     } else if (index == 1) {
       Navigator.pushReplacementNamed(context, '/keranjang');
     } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/shop');
-    } else if (index == 3) {
       // Tetap di halaman Kupon
-    } else if (index == 4) {
+    } else if (index == 3) {
       Navigator.pushReplacementNamed(context, '/profile');
     }
   }
@@ -153,7 +151,6 @@ class _KuponPageState extends State<KuponPage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_basket), label: 'Keranjang'),
-          BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop'),
           BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],

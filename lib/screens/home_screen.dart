@@ -100,23 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
       _currentIndex = index;
     });
 
-    if (index == 1) {
-      Navigator.pushNamed(context, '/keranjang');
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else if (index == 1) {
+      Navigator.pushReplacementNamed(context, '/keranjang');
     } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/shop');
+      Navigator.pushReplacementNamed(context, '/kupon');
     } else if (index == 3) {
-      Navigator.pushReplacementNamed(context, '/kupon'); // Navigasi ke KuponPage
-    } else if (index == 4) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const ProfileScreen(),
-        ),
-      ).then((_) {
-        setState(() {
-          _currentIndex = 0;
-        });
-      });
+      Navigator.pushReplacementNamed(context, '/profile');
     }
   }
 
@@ -205,7 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_basket), label: 'Keranjang'),
-          BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Shop'),
           BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
@@ -223,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       },
-            child: Card(
+      child: Card(
         child: Column(
           children: [
             Expanded(

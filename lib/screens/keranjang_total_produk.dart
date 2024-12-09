@@ -1,8 +1,86 @@
+import 'package:fishflow/product_model.dart';
+import 'package:fishflow/screens/keranjang_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'checkout.dart';
 
 class KeranjangTotalProduk extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartModel>(context);
+
+    double getTotalPrice() {
+      double total = 0;
+      cart.items.forEach((product, quantity) {
+        total += double.parse(product.price.replaceAll('Rp ', '').replaceAll('.', '')) * quantity;
+      });
+      return total;
+    }
+
+    @override
+    Widget buildCartItem(Product product, int quantity) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Image.asset(product.image, fit: BoxFit.cover),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  Text(
+                    'Rp ${product.price}',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Jumlah: $quantity',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: () {
+                    Provider.of<CartModel>(context, listen: false).decrement(product);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Provider.of<CartModel>(context, listen: false).increment(product);
+                  },
+                ),
+              ],
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                Provider.of<CartModel>(context, listen: false).remove(product);
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -27,188 +105,71 @@ class KeranjangTotalProduk extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCartItem(),
-              _buildCartItem(),
-              Divider(),
-              _buildDiscountCodeField(),
-              Divider(),
-              Text(
-                'Untukmu',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // Product items
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: cart.totalItems,
+                itemBuilder: (context, index) {
+                  final product = cart.items.keys.elementAt(index);
+                  final quantity = cart.items[product]!;
+                  return buildCartItem(product, quantity);
+                },
               ),
-              SizedBox(height: 8),
-              _buildSuggestionList(),
-              SizedBox(height: 16),
               Divider(),
-              _buildSummary(),
-              SizedBox(height: 16),
-              _buildCheckoutButton(context),
+              // Summary details
+              Text(
+                'Total Produk: ${cart.items.length}',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              Text(
+                'Subtotal Produk: Rp ${getTotalPrice().toStringAsFixed(0)}',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              Text(
+                'Biaya Layanan: Rp 1.500',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              Text(
+                'Biaya Pengiriman: Rp 10.500',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  'Total Pembayaran: Rp ${(getTotalPrice() + 1500 + 10500).toStringAsFixed(0)}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CheckoutPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade900,
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Buat Pesanan',
+                      style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildCartItem() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Ikan',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sem...',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 8),
-                Text('Rp', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'KUANTITAS    1',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    Icon(Icons.keyboard_arrow_down),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDiscountCodeField() {
-    return GestureDetector(
-      onTap: () {
-        // Aksi untuk memasukkan kode diskon
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Masukkan Kode Diskon',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            Icon(Icons.arrow_forward_ios, size: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSuggestionList() {
-    return SizedBox(
-      height: 150,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return Container(
-            width: 120,
-            margin: EdgeInsets.only(right: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Ikan',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-                Text(
-                  'Rp',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildSummary() {
-    return Column(
-      children: [
-        _buildSummaryRow('Total Produk', '2'),
-        _buildSummaryRow('Subtotal', 'Rp'),
-        _buildSummaryRow('Ongkir', 'Free'),
-        Divider(),
-        _buildSummaryRow('Total', 'Rp', isBold: true),
-      ],
-    );
-  }
-
-  Widget _buildSummaryRow(String title, String value, {bool isBold = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(fontSize: 14, fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontSize: 14, fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCheckoutButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          // Navigasi ke halaman checkout
-          Navigator.pushNamed(context, '/checkout');
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue[800],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-        child: Text(
-          'Pesan',
-          style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ));
   }
 }

@@ -1,5 +1,7 @@
+import 'package:fishflow/screens/keranjang_model.dart';
 import 'package:flutter/material.dart';
-import '../product_model.dart'; // Import model Product
+import 'package:provider/provider.dart';
+import '../product_model.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
@@ -12,7 +14,7 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(product.name),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,23 +33,23 @@ class ProductDetailScreen extends StatelessWidget {
               style: const TextStyle(fontSize: 18, color: Color.fromARGB(255, 0, 0, 0)),
             ),
             const SizedBox(height: 20),
-            // Menambahkan informasi tentang ketersediaan pengiriman (logistik)
             _buildLogisticsInfo(product.isPickUpAvailable),
             const SizedBox(height: 20),
-            // Spacer to push the button down
-            const Spacer(),
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 onPressed: () {
-                  // Fungsi untuk menambahkan produk ke keranjang
+                  // Menambahkan produk ke keranjang
+                  Provider.of<CartModel>(context, listen: false).add(product);
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Produk berhasil ditambahkan ke keranjang!")),
                   );
+                  Navigator.pushNamed(context, '/keranjang');
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue.shade900, // Latar belakang biru tua
-                  foregroundColor: Colors.white, // Teks berwarna putih
+                  backgroundColor: Colors.blue.shade900,
+                  foregroundColor: Colors.white,
                 ),
                 child: const Text("Masukkan Keranjang"),
               ),
@@ -58,12 +60,11 @@ class ProductDetailScreen extends StatelessWidget {
     );
   }
 
-  // Widget untuk menampilkan status logistik
   Widget _buildLogisticsInfo(bool isAvailable) {
     return Row(
       children: [
         Icon(
-          Icons.local_shipping, // Ikon truk logistik
+          Icons.local_shipping,
           color: isAvailable ? Colors.green : Colors.red,
         ),
         const SizedBox(width: 5),

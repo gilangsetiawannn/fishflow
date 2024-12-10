@@ -43,88 +43,90 @@ class _KuponPageState extends State<KuponPage> {
           style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Kupon Info
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.indigo),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      "100 Voucher",
-                      style: TextStyle(
-                        color: Colors.indigo,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () {
-                      // Tambahkan aksi jika tombol Kode Promo di-tap
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Kupon Info
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.indigo),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Kode Promo",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Icon(Icons.arrow_forward, color: Colors.black),
-                        ],
+                      child: Text(
+                        "100 Voucher",
+                        style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () {
+                        // Tambahkan aksi jika tombol Kode Promo di-tap
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Kode Promo",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Icon(Icons.arrow_forward, color: Colors.black),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              "Promo Spesial",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.indigo,
+              const SizedBox(height: 24),
+              Text(
+                "Promo Spesial",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(8),
+              const SizedBox(height: 12),
+              Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              "Dengan Potongan Harga",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.indigo,
+              const SizedBox(height: 24),
+              Text(
+                "Dengan Potongan Harga",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo,
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: GridView.builder(
+              const SizedBox(height: 12),
+              GridView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
                 itemCount: 4,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -140,8 +142,8 @@ class _KuponPageState extends State<KuponPage> {
                   );
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

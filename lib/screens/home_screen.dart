@@ -21,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/tuna.jpg',
       description: 'Tuna segar dengan kandungan omega-3 tinggi.',
       isPickUpAvailable: true,
+      storeName: 'Toko Ikan Bahari',
+      distributor: 'Distribusi Laut Segar',
+      purchaseLimit: 5,
     ),
     Product(
       name: 'Ikan Salmon',
@@ -28,6 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/salmon.jpg',
       description: 'Salmon kaya omega-3, dagingnya kenyal.',
       isPickUpAvailable: false,
+      storeName: 'Toko Ikan Bahari',
+      distributor: 'Distribusi Laut Segar',
+      purchaseLimit: 3,
     ),
     Product(
       name: 'Cumi',
@@ -35,6 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/cumi.jpg',
       description: 'Cumi segar untuk berbagai hidangan laut.',
       isPickUpAvailable: false,
+      storeName: 'Toko Laut Nusantara',
+      distributor: 'Segar Sentosa',
+      purchaseLimit: 10,
     ),
     Product(
       name: 'Udang',
@@ -42,6 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/udang.jpg',
       description: 'Udang segar, cocok untuk berbagai hidangan.',
       isPickUpAvailable: false,
+      storeName: 'Toko Laut Nusantara',
+      distributor: 'Segar Sentosa',
+      purchaseLimit: 8,
     ),
     Product(
       name: 'Ikan Kakap Merah',
@@ -49,6 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/kakap_merah.jpg',
       description: 'Ikan kakap merah segar dengan daging lezat.',
       isPickUpAvailable: false,
+      storeName: 'Toko Laut Nusantara',
+      distributor: 'Segar Sentosa',
+      purchaseLimit: 8,
     ),
     Product(
       name: 'Ikan Tenggiri',
@@ -56,6 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/tenggiri.jpg',
       description: 'Ikan tenggiri kaya protein.',
       isPickUpAvailable: false,
+      storeName: 'Toko Ikan Bahari',
+      distributor: 'Distribusi Laut Segar',
+      purchaseLimit: 8,
     ),
     Product(
       name: 'Ikan Kerapu',
@@ -63,6 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/kerapu.jpg',
       description: 'Ikan kerapu segar dan bergizi.',
       isPickUpAvailable: false,
+      storeName: 'Toko Ikan Bahari',
+      distributor: 'Distribusi Laut Segar',
+      purchaseLimit: 8,
     ),
     Product(
       name: 'Ikan Dori',
@@ -70,6 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/dori.jpg',
       description: 'Ikan dori segar dengan daging yang lembut.',
       isPickUpAvailable: true,
+      storeName: 'Toko Ikan Bahari',
+      distributor: 'Distribusi Laut Segar',
+      purchaseLimit: 8,
     ),
   ];
 
@@ -94,22 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _onBottomNavigationTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-
-    if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/keranjang');
-    } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/kupon');
-    } else if (index == 3) {
-      Navigator.pushReplacementNamed(context, '/profile');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,66 +132,56 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                hintText: 'Cari produk...',
-                prefixIcon: Icon(Icons.search),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Cari produk...',
+                  prefixIcon: Icon(Icons.search),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      const Text("Best Seller", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                    ]),
-                  ),
-                  SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final product = _searchResults[index];
-                        return _buildProductCard(product);
-                      },
-                      childCount: _searchResults.length >= 4 ? 4 : _searchResults.length,
-                    ),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      const SizedBox(height: 20),
-                      const Text("Favorite", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
-                    ]),
-                  ),
-                  SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final product = _products[index + 4];
-                        return _buildProductCard(product);
-                      },
-                      childCount: _products.length - 4,
-                    ),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 20),
+              const Text("Best Seller", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 2 / 3,
+                ),
+                itemCount: _searchResults.length >= 4 ? 4 : _searchResults.length,
+                itemBuilder: (context, index) {
+                  final product = _searchResults[index];
+                  return _buildProductCard(product);
+                },
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              const Text("Favorite", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 2 / 3,
+                ),
+                itemCount: _products.length - 4,
+                itemBuilder: (context, index) {
+                  final product = _products[index + 4];
+                  return _buildProductCard(product);
+                },
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -191,7 +189,21 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.blue.shade900,
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
-        onTap: _onBottomNavigationTap,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+
+          if (index == 0) {
+            Navigator.pushReplacementNamed(context, '/home');
+          } else if (index == 1) {
+            Navigator.pushReplacementNamed(context, '/keranjang');
+          } else if (index == 2) {
+            Navigator.pushReplacementNamed(context, '/kupon');
+          } else if (index == 3) {
+            Navigator.pushReplacementNamed(context, '/profile');
+          }
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_basket), label: 'Keranjang'),
@@ -213,17 +225,78 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
       child: Card(
-        child: Column(
-          children: [
-            Expanded(
-              child: Image.asset(product.image, fit: BoxFit.cover),
-            ),
-            const SizedBox(height: 8),
-            Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-            Text(product.price, style: const TextStyle(color: Colors.grey)),
-            const SizedBox(height: 8),
-            _buildLogisticsInfo(product.isPickUpAvailable),
-          ],
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  Image.asset(
+                    product.image,
+                    fit: BoxFit.cover,
+                    height: 120,
+                    width: double.infinity,
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.shopping_bag, color: Colors.blue.shade900, size: 16),
+                          const SizedBox(width: 4),
+                          Text('Batas: ${product.purchaseLimit}', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: Text(
+                  product.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  product.price,
+                  style: const TextStyle(color: Colors.grey),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+                            const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  'Toko: ${product.storeName}',
+                  style: TextStyle(color: Colors.blue.shade900, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  'Distributor: ${product.distributor}',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: _buildLogisticsInfo(product.isPickUpAvailable),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -243,6 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
             color: isAvailable ? Colors.green : Colors.red,
             fontWeight: FontWeight.bold,
+            fontSize: 12,
           ),
         ),
       ],

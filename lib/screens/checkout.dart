@@ -7,6 +7,8 @@ import 'opsi_pengiriman.dart';
 import 'pesanan_diterima.dart';
 
 class CheckoutPage extends StatefulWidget {
+  const CheckoutPage({super.key});
+
   @override
   _CheckoutPageState createState() => _CheckoutPageState();
 }

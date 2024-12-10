@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NotifikasiKonfirmasiPage extends StatelessWidget {
+  const NotifikasiKonfirmasiPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +69,11 @@ class NotifikasiKonfirmasiPage extends StatelessWidget {
               onPressed: () {
                 // Tambahkan aksi konfirmasi di sini
               },
-              child: Text("Konfirmasi"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.indigo,
                 minimumSize: Size(double.infinity, 48), // Full-width button
               ),
+              child: Text("Konfirmasi"),
             ),
           ],
         ),

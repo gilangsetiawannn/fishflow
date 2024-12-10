@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PromoCodeSelectionPage extends StatefulWidget {
+  const PromoCodeSelectionPage({super.key});
+
   @override
   _PromoCodeSelectionPageState createState() => _PromoCodeSelectionPageState();
 }
@@ -79,11 +81,11 @@ class PromoCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const PromoCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.details,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

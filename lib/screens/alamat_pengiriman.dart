@@ -5,7 +5,7 @@ class AlamatPengirimanPage extends StatefulWidget {
   final String initialName;
   final String initialPhone;
 
-  AlamatPengirimanPage({required this.initialAddress, required this.initialName, required this.initialPhone});
+  const AlamatPengirimanPage({super.key, required this.initialAddress, required this.initialName, required this.initialPhone});
 
   @override
   _AlamatPengirimanPageState createState() => _AlamatPengirimanPageState();

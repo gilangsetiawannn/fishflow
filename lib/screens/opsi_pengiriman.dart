@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class OpsiPengiriman extends StatefulWidget {
   final String initialOption;
 
-  OpsiPengiriman({required this.initialOption});
+  const OpsiPengiriman({super.key, required this.initialOption});
 
   @override
   _OpsiPengirimanState createState() => _OpsiPengirimanState();

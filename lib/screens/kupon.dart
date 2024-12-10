@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class KuponPage extends StatefulWidget {
+  const KuponPage({super.key});
+
   @override
   _KuponPageState createState() => _KuponPageState();
 }
@@ -162,7 +164,7 @@ class _KuponPageState extends State<KuponPage> {
 class ProductCard extends StatelessWidget {
   final VoidCallback onTap;
 
-  const ProductCard({Key? key, required this.onTap}) : super(key: key);
+  const ProductCard({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

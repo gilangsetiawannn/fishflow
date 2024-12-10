@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../product_model.dart';
 
 class Keranjang extends StatefulWidget {
+  const Keranjang({super.key});
+
   @override
   _KeranjangState createState() => _KeranjangState();
 }

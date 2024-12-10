@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'checkout.dart';
 
 class KeranjangTotalProduk extends StatelessWidget {
+  const KeranjangTotalProduk({super.key});
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartModel>(context);

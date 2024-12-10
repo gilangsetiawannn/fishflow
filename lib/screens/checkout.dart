@@ -18,6 +18,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   String _address = 'Jalan Sei Wain No. 00, RT. 90, Karang Joang, Kota Balikpapan, ID 76100';
   String _recipientName = 'Amay';
   String _recipientPhone = '(\u002B62) 812-0000-0000';
+  double _discount = 0.0;
 
   void _updateAddress(String newAddress, String newName, String newPhone) {
     setState(() {
@@ -36,7 +37,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void _applyPromoCode(String promoCode) {
     setState(() {
       _selectedPromoCode = promoCode;
+      _discount = _calculateDiscount(promoCode);
     });
+  }
+
+  double _calculateDiscount(String promoCode) {
+    switch (promoCode) {
+      case '25k off food.':
+        return 25000.0;
+      case '20k off food.':
+        return 20000.0;
+      case '15k off food.':
+        return 15000.0;
+      case '75k off food.':
+        return 75000.0;
+      default:
+        return 0.0;
+    }
   }
 
   @override
@@ -49,6 +66,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
         total += double.parse(product.price.replaceAll('Rp ', '').replaceAll('.', '')) * quantity;
       });
       return total;
+    }
+
+    double getDiscountedPrice(double totalPrice) {
+      return totalPrice - _discount;
     }
 
     return Scaffold(
@@ -183,6 +204,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   Text(
+                    'Diskon: Rp $_discount',
+                    style: TextStyle(fontSize: 14, color: Colors.green),
+                  ),
+                  Text(
                     'Biaya Layanan: Rp 1.500',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
@@ -192,28 +217,30 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Total Pembayaran: Rp ${(getTotalPrice() + 1500 + 10500).toStringAsFixed(0)}',
+                    'Total Pembayaran: Rp ${(getDiscountedPrice(getTotalPrice()) + 1500 + 10500).toStringAsFixed(0)}',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PesananDiterima()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade900,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PesananDiterima()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade900,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      'Bayar Sekarang',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      child: Text(
+                        'Bayar Sekarang',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],

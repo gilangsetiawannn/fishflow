@@ -7,7 +7,7 @@ import 'package:fishflow/screens/keranjang_total_produk.dart';
 import 'package:fishflow/screens/login_screen.dart';
 import 'package:fishflow/screens/register_screen.dart';
 import 'package:fishflow/screens/forgot_password_screen.dart';
-import 'package:fishflow/screens/reset_password_screen.dart';
+import 'package:fishflow/screens/reset_password_screen.dart'; // Import ResetPasswordScreen
 import 'package:fishflow/screens/home_screen.dart';
 import 'package:fishflow/screens/profile_screen.dart';
 import 'package:fishflow/screens/product_detail_screen.dart';
@@ -17,7 +17,7 @@ import 'package:fishflow/screens/checkout.dart';
 import 'package:fishflow/screens/notifikasi_konfirmasi.dart';
 import 'package:fishflow/screens/notifikasi.dart';
 import 'package:fishflow/screens/opsi_pengiriman.dart';
-import 'package:fishflow/screens/pesanan_diterima.dart'; // Import PromoCodeSelectionPage
+import 'package:fishflow/screens/pesanan_diterima.dart';
 import 'package:fishflow/product_model.dart';
 
 void main() {
@@ -46,12 +46,11 @@ class MyApp extends StatelessWidget {
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/resetPassword': (context) => const ResetPasswordScreen(),
         '/home': (context) => const HomeScreen(),
-        '/profile': (context) => const ProfileScreen(),
+        '/profile': (context) => ProfileScreen(),
         '/keranjang': (context) => Keranjang(),
         '/keranjang_total_produk': (context) => KeranjangTotalProduk(),
         '/kupon': (context) => KuponPage(),
         '/checkout': (context) => CheckoutPage(),
-        // Parameter pass through to AlamatPengirimanPage and OpsiPengiriman
         '/alamat_pengiriman': (context) => AlamatPengirimanPage(
           initialAddress: '', // Provide default values or manage differently
           initialName: '',

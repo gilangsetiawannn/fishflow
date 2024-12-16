@@ -111,7 +111,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ElevatedButton(
                   onPressed: () {
                     if (isAgreeChecked && passwordController.text == confirmPasswordController.text) {
-                      // Mengambil data pengguna
                       final Map<String, String> userData = {
                         'name': nameController.text,
                         'email': emailController.text,
@@ -119,12 +118,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         'role': selectedRole ?? '',
                       };
 
-                      // Mengarahkan ke halaman login dan mengirimkan data pengguna
-                      Navigator.pushReplacementNamed(
-                        context,
-                        '/login',
-                        arguments: userData, // Mengirim data ke halaman login
-                      );
+                      if (selectedRole == 'Logistik') {
+                        Navigator.pushReplacementNamed(context, '/logisticsHome', arguments: userData);
+                      } else if (selectedRole == 'Penjual') {
+                        Navigator.pushReplacementNamed(context, '/penjualHome', arguments: userData);
+                      } else {
+                        Navigator.pushReplacementNamed(context, '/home', arguments: userData);
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

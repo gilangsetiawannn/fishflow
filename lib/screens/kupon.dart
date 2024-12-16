@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../product_model.dart';
 
 class KuponPage extends StatefulWidget {
   const KuponPage({super.key});
@@ -9,6 +10,49 @@ class KuponPage extends StatefulWidget {
 
 class _KuponPageState extends State<KuponPage> {
   int _currentIndex = 2; // Menyoroti tab Rewards sebagai aktif
+
+  final List<Product> _products = [
+    Product(
+      name: 'Ikan Tuna',
+      price: 'Rp 80.000',
+      image: 'assets/tuna.jpg',
+      description: 'Tuna segar dengan kandungan omega-3 tinggi.',
+      isPickUpAvailable: true,
+      storeName: 'Toko Ikan Bahari',
+      distributor: 'Distribusi Laut Segar',
+      purchaseLimit: 5,
+    ),
+    Product(
+      name: 'Ikan Salmon',
+      price: 'Rp 150.000',
+      image: 'assets/salmon.jpg',
+      description: 'Salmon kaya omega-3, dagingnya kenyal.',
+      isPickUpAvailable: false,
+      storeName: 'Toko Ikan Bahari',
+      distributor: 'Distribusi Laut Segar',
+      purchaseLimit: 3,
+    ),
+    Product(
+      name: 'Cumi',
+      price: 'Rp 70.000',
+      image: 'assets/cumi.jpg',
+      description: 'Cumi segar untuk berbagai hidangan laut.',
+      isPickUpAvailable: false,
+      storeName: 'Toko Laut Nusantara',
+      distributor: 'Segar Sentosa',
+      purchaseLimit: 10,
+    ),
+    Product(
+      name: 'Udang',
+      price: 'Rp 100.000',
+      image: 'assets/udang.jpg',
+      description: 'Udang segar, cocok untuk berbagai hidangan.',
+      isPickUpAvailable: false,
+      storeName: 'Toko Laut Nusantara',
+      distributor: 'Segar Sentosa',
+      purchaseLimit: 8,
+    ),
+  ];
 
   void _onBottomNavigationTap(int index) {
     setState(() {
@@ -24,6 +68,85 @@ class _KuponPageState extends State<KuponPage> {
     } else if (index == 3) {
       Navigator.pushReplacementNamed(context, '/profile');
     }
+  }
+
+  Widget _buildProductCard(Product product) {
+    return GestureDetector(
+      onTap: () {
+        // Tambahkan aksi jika card di-tap
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  Image.asset(
+                    product.image,
+                    fit: BoxFit.cover,
+                    height: 120,
+                    width: double.infinity,
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.shopping_bag, color: Colors.blue.shade900, size: 16),
+                          const SizedBox(width: 4),
+                          Text('Batas: ${product.purchaseLimit}', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Flexible(
+                child: Text(
+                  product.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  product.price,
+                  style: const TextStyle(color: Colors.grey),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  'Toko: ${product.storeName}',
+                  style: TextStyle(color: Colors.blue.shade900, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Flexible(
+                child: Text(
+                  'Distributor: ${product.distributor}',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -127,19 +250,16 @@ class _KuponPageState extends State<KuponPage> {
               GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: 4,
+                itemCount: _products.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
-                  childAspectRatio: 3 / 4,
+                  childAspectRatio: 2 / 3,
                 ),
                 itemBuilder: (context, index) {
-                  return ProductCard(
-                    onTap: () {
-                      // Tambahkan aksi jika card di-tap
-                    },
-                  );
+                  final product = _products[index];
+                  return _buildProductCard(product);
                 },
               ),
             ],
@@ -158,93 +278,6 @@ class _KuponPageState extends State<KuponPage> {
           BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
-      ),
-    );
-  }
-}
-
-class ProductCard extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const ProductCard({super.key, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              blurRadius: 4,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-                    ),
-                    child: Center(
-                      child: Icon(Icons.image, size: 50, color: Colors.grey),
-                    ),
-                  ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Icon(
-                      Icons.star_border,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Ikan',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipis...',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Rp',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

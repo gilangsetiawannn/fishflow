@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class PenjualProfileScreen extends StatefulWidget {
+  const PenjualProfileScreen({super.key});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _PenjualProfileScreenState createState() => _PenjualProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  String _name = 'Nama Pengguna';
+class _PenjualProfileScreenState extends State<PenjualProfileScreen> {
+  String _name = 'Nama Penjual';
   String _email = 'email@contoh.com';
   String _phoneNumber = '(\u002B62) 812-0000-0000';
-  int _currentIndex = 3; // Menyoroti tab Profil sebagai aktif
+  int _currentIndex = 4; // Menyoroti tab Profil sebagai aktif
 
   void _editField(String field, String currentValue, Function(String) onSaved) {
     showDialog(
@@ -53,12 +53,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/penjualHome');
     } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/keranjang');
+      Navigator.pushReplacementNamed(context, '/penjualNotifikasi'); // Ubah ini untuk memastikan navigasi ke halaman notifikasi penjual
     } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/kupon');
+      Navigator.pushReplacementNamed(context, '/produk');
     } else if (index == 3) {
+      Navigator.pushReplacementNamed(context, '/addProduct');
+    } else if (index == 4) {
       // Tetap di halaman Profil
     }
   }
@@ -72,8 +74,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profil'),
-        backgroundColor: Colors.transparent,
+        title: Text('Profil Penjual', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.blueAccent,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -94,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         // Tambahkan aksi untuk mengedit profil
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade900,
+                        backgroundColor: Colors.blueAccent,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -107,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 32),
               ListTile(
-                leading: Icon(Icons.person, color: Colors.blue.shade900),
+                leading: Icon(Icons.person, color: Colors.blueAccent),
                 title: Text('Nama'),
                 subtitle: Text(_name),
                 trailing: Icon(Icons.edit, color: Colors.grey),
@@ -121,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               Divider(),
               ListTile(
-                leading: Icon(Icons.email, color: Colors.blue.shade900),
+                leading: Icon(Icons.email, color: Colors.blueAccent),
                 title: Text('Alamat Email'),
                 subtitle: Text(_email),
                 trailing: Icon(Icons.edit, color: Colors.grey),
@@ -135,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               Divider(),
               ListTile(
-                leading: Icon(Icons.phone, color: Colors.blue.shade900),
+                leading: Icon(Icons.phone, color: Colors.blueAccent),
                 title: Text('Nomor Handphone'),
                 subtitle: Text(_phoneNumber),
                 trailing: Icon(Icons.edit, color: Colors.grey),
@@ -173,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   child: Text(
                     'Reset Password ?',
-                    style: TextStyle(color: Colors.blue.shade900, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -183,14 +185,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue.shade900,
+        selectedItemColor: Colors.blueAccent,
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
         onTap: _onBottomNavigationTap,
-        items: const [
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_basket), label: 'Keranjang'),
-          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Rewards'),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notifikasi'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag), label: 'Produk'),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Tambah'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),
